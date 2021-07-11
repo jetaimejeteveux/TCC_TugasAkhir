@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  manusia_db:
+    container_name: manusia_db
+    image: mysql:8.0
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - manusia_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: MSIgl638rd?
+      MYSQL_DATABASE: newdb
+      MYSQL_USER: firman    
+      MYSQL_PASSWORD: Firman132!
+    networks:
+      - network_coba
+    ports:
+      - "3301:3306"
+
+  user_db:
+    container_name: user_db
+    image: mysql:8.0
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - user_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: MSIgl638rd?
+      MYSQL_DATABASE: newdb2
+      MYSQL_USER: firman
+      MYSQL_PASSWORD: Firman132!
+    networks:
+      - network_coba
+    ports:
+      - "3302:3306"
+
+  webapp:
+    container_name: webapp
+    build: .
+    restart: always
+    depends_on:
+      - manusia_db
+      - user_db
+    networks:
+      - network_coba
+    ports:
+      - "1234:80"
+
+networks:
+  network_coba:
+volumes:
+  manusia_volume:
+  user_volume:
